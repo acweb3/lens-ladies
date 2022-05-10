@@ -1,0 +1,5 @@
+node_modules
+
+art/assets/*
+metadata/artists/*
+metadata/data/*

@@ -4,7 +4,15 @@ const rimraf = require('rimraf');
 const camelCase = require('camelcase');
 const { execSync } = require('child_process');
 
-const IPFS_TEMP_DIR = '__TEMP__';
+const IPFS_TEMP_DIR = 'ipfs://QmdLL1tdkmoGhKTePY6H9GhsGeqeCHQskBcWkoqjsaVUKe';
+const DO_NOT_INCLUDE_TRAIT_TYPES = [
+    'tokenId',
+    'camelCase',
+    'Wallet',
+    'Name',
+    'Description',
+    'Charity',
+];
 
 const convertFFMPEG = (conversions) => {
     for (const [cmd, conversion] of conversions) {
@@ -37,7 +45,10 @@ const getData = () => {
                         trait_type: headers[i],
                         value: next,
                     },
-                ],
+                ].filter(
+                    (attr) =>
+                        !DO_NOT_INCLUDE_TRAIT_TYPES.includes(attr.trait_type)
+                ),
             };
         }, {});
     });
@@ -74,13 +85,17 @@ const artists = async () => {
         // Write assets
         let image;
         let video;
+        let key;
 
         assetDir.map((asset) => {
             const [fileName, extName] = asset.split('.');
+
             if (
                 extName.toLowerCase() === 'jpg' ||
                 extName.toLowerCase() === 'jpeg'
             ) {
+                key = camelCase(fileName);
+
                 fs.cpSync(
                     path.join(
                         __dirname,
@@ -144,8 +159,10 @@ const artists = async () => {
         // Write data
         const metadata = {
             ...dataMap[artistDirName],
+            key,
             image_url: `${IPFS_TEMP_DIR}/${image}`,
         };
+
         const text = JSON.stringify(metadata, null, 4);
 
         fs.writeFileSync(

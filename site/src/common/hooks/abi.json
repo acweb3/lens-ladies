@@ -10,6 +10,7 @@
 	"function balanceOf(address) view returns (uint256)",
 	"function getApproved(uint256) view returns (address)",
 	"function isApprovedForAll(address,address) view returns (bool)",
+	"function listPrice() view returns (uint256)",
 	"function mint(uint256) payable",
 	"function name() view returns (string)",
 	"function owner() view returns (address)",

@@ -7,8 +7,16 @@ const requiredEnvVar = (name, envVar) => {
 };
 
 export const config = {
-	rinkebyContractAddress: requiredEnvVar(
+	contractAddress: requiredEnvVar(
 		"contractAddress",
 		process.env.REACT_APP_CONTRACT_ADDRESS
+	),
+	rinkebyAlchemyURL: requiredEnvVar(
+		"rinkebyAlchemyURL",
+		process.env.REACT_APP_RINKEBY_ALCHEMY_URL
+	),
+	mainnetAlchemyURL: requiredEnvVar(
+		"mainnetAlchemyURL",
+		process.env.REACT_APP_MAINNET_ALCHEMY_URL
 	),
 };

@@ -3,6 +3,7 @@ import { pullAsset } from "common/utils/pullAsset";
 import * as S from "components/Imaginarium/Imaginarium.styled";
 import { ImaginariumPiece } from "components/Imaginarium/ImaginariumPiece";
 import { useAllTokenOwners } from "components/Imaginarium/hooks/useAllTokenOwners";
+import { useListPrice } from "components/Imaginarium/hooks/useListPrice";
 import { useEffect, useState } from "react";
 
 const chunk = (arr) => {
@@ -21,6 +22,7 @@ const chunk = (arr) => {
 export const Imaginarium = () => {
 	const [nfts, setNfts] = useState([]);
 	const { allTokenOwners } = useAllTokenOwners();
+	const { listPrice } = useListPrice();
 
 	useEffect(() => {
 		const fetchImages = async () => {
@@ -57,6 +59,7 @@ export const Imaginarium = () => {
 											? allTokenOwners[nft.tokenId]
 											: undefined
 									}
+									listPrice={listPrice}
 								/>
 							);
 						})}

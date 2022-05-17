@@ -1,13 +1,30 @@
 import { ChainId, DAppProvider } from "@usedapp/core";
+import { config } from "config";
 
-const config = {
+const rinkebyConfig = {
 	readOnlyChainId: ChainId.Rinkeby,
 	readOnlyUrls: {
-		[ChainId.Rinkeby]:
-			"https://eth-rinkeby.alchemyapi.io/v2/jKXV4sfwY85HRiEpFxlduW2DL5uBdo3a",
+		[ChainId.Rinkeby]: config.rinkebyAlchemyURL,
+	},
+};
+
+const mainnetConfig = {
+	readOnlyChainId: ChainId.Mainnet,
+	readOnlyUrls: {
+		[ChainId.Mainnet]: config.mainnetAlchemyURL,
 	},
 };
 
 export const DAppContext = ({ children }) => {
-	return <DAppProvider config={config}>{children}</DAppProvider>;
+	return (
+		<DAppProvider
+			config={
+				process.env.NODE_ENV === "development"
+					? rinkebyConfig
+					: mainnetConfig
+			}
+		>
+			{children}
+		</DAppProvider>
+	);
 };

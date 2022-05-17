@@ -3,7 +3,7 @@ import { ImaginariumOwner } from "components/Imaginarium/ImaginariumPiece/Imagin
 import * as S from "components/Imaginarium/ImaginariumPiece/ImaginariumPiece.styled";
 import { useState } from "react";
 
-export const ImaginariumPiece = ({ nft, ownerOf }) => {
+export const ImaginariumPiece = ({ nft, ownerOf, listPrice }) => {
 	const [isVideo, setIsVideo] = useState(false);
 
 	return (
@@ -25,7 +25,7 @@ export const ImaginariumPiece = ({ nft, ownerOf }) => {
 				<img alt={nft.name} src={nft.image} />
 			</S.ImaginariumImageWrapper>
 			<S.ImaginariumCopy>
-				{nft.artist} — {nft.name} (2.2ETH)
+				{nft.artist} — {nft.name} {listPrice && <>({listPrice} ETH)</>}
 			</S.ImaginariumCopy>
 			<ImaginariumMint nft={nft} ownerOf={ownerOf} />
 			{ownerOf && <ImaginariumOwner address={ownerOf} />}

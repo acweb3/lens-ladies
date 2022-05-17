@@ -1,5 +1,5 @@
 import { ImaginariumMint } from "components/Imaginarium/ImaginariumPiece/ImaginariumMint";
-import { ImaginariumOwner } from "components/Imaginarium/ImaginariumPiece/ImaginariumMint/ImaginariumOwner";
+import { ImaginariumOwner } from "components/Imaginarium/ImaginariumPiece/ImaginariumOwner";
 import * as S from "components/Imaginarium/ImaginariumPiece/ImaginariumPiece.styled";
 import { useState } from "react";
 
@@ -27,8 +27,12 @@ export const ImaginariumPiece = ({ nft, ownerOf, listPrice }) => {
 			<S.ImaginariumCopy>
 				{nft.artist} — {nft.name} {listPrice && <>({listPrice} ETH)</>}
 			</S.ImaginariumCopy>
-			<ImaginariumMint nft={nft} ownerOf={ownerOf} />
-			{ownerOf && <ImaginariumOwner address={ownerOf} />}
+			<ImaginariumMint
+				nft={nft}
+				ownerOf={ownerOf}
+				listPrice={listPrice}
+			/>
+			<ImaginariumOwner address={ownerOf} />
 		</S.ImaginariumPiece>
 	);
 };

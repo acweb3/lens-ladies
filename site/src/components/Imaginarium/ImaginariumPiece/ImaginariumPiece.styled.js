@@ -41,7 +41,7 @@ export const ImaginariumImageWrapper = styled.div`
 
 			&::after {
 				content: "SOLD";
-				font-family: wix2;
+				font-family: wix1;
 				position: absolute;
 				top: calc(50% - 24px);
 

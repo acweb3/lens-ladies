@@ -3,7 +3,7 @@ import { useChainConfig } from "common/hooks/useChainConfig";
 import { utils } from "ethers";
 import { useEffect, useState } from "react";
 
-export const useMint = ({ tokenId }) => {
+export const useMint = ({ tokenId, listPrice }) => {
 	const { contract } = useChainConfig();
 	const { account } = useEthers();
 	const [error, setError] = useState(undefined);
@@ -45,7 +45,7 @@ export const useMint = ({ tokenId }) => {
 
 		try {
 			await send(tokenId, {
-				value: utils.parseEther("0.022"),
+				value: utils.parseEther(listPrice),
 			});
 		} catch (e) {
 			console.error(e);

@@ -4,13 +4,13 @@ import * as S from "components/Imaginarium/ImaginariumPiece/ImaginariumMint/Imag
 import { useMint } from "components/Imaginarium/ImaginariumPiece/ImaginariumMint/hooks/useMint";
 import { useToggleTokenVideoState } from "components/Imaginarium/ImaginariumPiece/ImaginariumMint/hooks/useToggleTokenVideoState";
 
-export const ImaginariumMint = ({ nft, ownerOf }) => {
+export const ImaginariumMint = ({ nft, ownerOf, listPrice }) => {
 	const { activateBrowserWallet, account } = useEthers();
 	const {
 		mint,
 		error: mintError,
 		isMinting,
-	} = useMint({ tokenId: nft.tokenId });
+	} = useMint({ tokenId: nft.tokenId, listPrice });
 	const {
 		toggleTokenVideoState,
 		error: toggleError,
@@ -70,11 +70,9 @@ export const ImaginariumMint = ({ nft, ownerOf }) => {
 					</S.ImaginariumMintButton>
 				);
 			})()}
-			{(mintError || toggleError) && (
-				<S.ImaginariumMintError>
-					{JSON.stringify(mintError || toggleError)}
-				</S.ImaginariumMintError>
-			)}
+			<S.ImaginariumMintError isActive={mintError || toggleError}>
+				{JSON.stringify(mintError || toggleError)}
+			</S.ImaginariumMintError>
 		</S.ImaginariumMint>
 	);
 };

@@ -13,7 +13,7 @@ contract LensLadies is ERC721, Ownable {
 	string imageBaseURI;
 	string videoBaseURI;
 	address sweetAndy = 0x4B0b14d91D325981873703025ab055C3645521b7;
-	uint256 listPrice = 2200000000000000000;
+	uint256 public listPrice = 2200000000000000000;
 	uint256 artistCut = 1700000000000000000;
 	uint256 tokenLimit = 9;
 	uint256[] private pastSales; // list of past sales
@@ -23,7 +23,8 @@ contract LensLadies is ERC721, Ownable {
 
 	/**
 	 * Set up ERC721 contract
-	 * @param imageBaseURI_ base uri for tokens
+	 * @param imageBaseURI_ base uri for still
+	 * @param videoBaseURI_ base uri for animated
 	 * @param artistAddresses artist addresses in token order
 	 */
 	constructor(
@@ -135,7 +136,7 @@ contract LensLadies is ERC721, Ownable {
 		address reserverAddress
 	) public onlyOwner {
 		/// @dev minimum price is artist cut
-		require(updatedPrice >= artistCut, "LOW_ETH");
+		require(updatedPrice >= artistCut, "ARTIST_CUT_NOT_MET");
 		reserveMapping[tokenId] = Reserve({
 			updatedPrice: updatedPrice,
 			reserverAddress: reserverAddress
@@ -156,6 +157,11 @@ contract LensLadies is ERC721, Ownable {
 	 */
 	function mint(uint256 tokenId) public payable {
 		/// @notice check for reserve and eth price before minting
+		require(
+			reserveMapping[tokenId].reserverAddress == address(0) ||
+				reserveMapping[tokenId].reserverAddress == msg.sender,
+			"TOKEN_RESERVED"
+		);
 		require(
 			listPrice <= msg.value ||
 				(reserveMapping[tokenId].reserverAddress == msg.sender &&
@@ -179,6 +185,8 @@ contract LensLadies is ERC721, Ownable {
 	function withdraw() public onlyOwner {
 		uint256 balance = address(this).balance;
 
+		/// @dev maybe a bit of a footgun, but artistCut will need to be lowered if there
+		/// is no way to pay all artists their cut.
 		require(
 			balance > pastSales.length * artistCut,
 			"INSUFFICIENT_BALANCE_FOR_ARTIST"
@@ -186,19 +194,15 @@ contract LensLadies is ERC721, Ownable {
 
 		// Pass collaborators their cut
 		for (uint256 i = 0; i < pastSales.length; i++) {
-			// # TODO => add a check here to make sure there is at least artistCut
-			// to cover balance
 			balance = balance - artistCut;
-
 			address artistAddress = artistTokenMap[pastSales[i]];
-			(bool artistSuccess, ) = artistAddress.call{ value: artistCut }("");
-			require(artistSuccess, "FAILED_SEND_ARTIST");
+			Address.sendValue(payable(artistAddress), artistCut);
 		}
 
 		delete pastSales;
 
 		// Send devs 5%
-		Address.sendValue(payable(owner()), (balance * 5) / 100);
+		Address.sendValue(payable(sweetAndy), (balance * 5) / 100);
 		// Send owner remainder of balance
 		Address.sendValue(payable(owner()), (balance * 95) / 100);
 	}

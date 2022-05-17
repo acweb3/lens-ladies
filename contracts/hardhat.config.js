@@ -3,11 +3,21 @@
  */
 require("@nomiclabs/hardhat-ethers");
 require("@nomiclabs/hardhat-etherscan");
+require("hardhat-abi-exporter");
 
 const { config } = require("./config");
 
 module.exports = {
 	solidity: "0.8.7",
+
+	abiExporter: {
+		runOnCompile: true,
+		clear: true,
+		flat: true,
+		only: [":LensLadies$"],
+		spacing: 2,
+		pretty: true,
+	},
 
 	networks: {
 		mainnet: {

@@ -1,7 +1,6 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -16,6 +15,7 @@ contract LensLadies is ERC721, Ownable {
 	address sweetAndy = 0x4B0b14d91D325981873703025ab055C3645521b7;
 	uint256 listPrice = 2200000000000000000;
 	uint256 artistCut = 1700000000000000000;
+	uint256 tokenLimit = 9;
 	uint256[] private pastSales; // list of past sales
 	mapping(uint256 => Reserve) reserveMapping; // mapping of reserves
 	mapping(uint256 => address) artistTokenMap; // which artist made which token
@@ -43,6 +43,14 @@ contract LensLadies is ERC721, Ownable {
 	/*--------------------------*/
 	/// Setters
 	/*--------------------------*/
+
+	/**
+	 * @notice update the token limit
+	 * @param tokenLimit_ new token limit
+	 */
+	function setTokenLimit(uint256 tokenLimit_) public onlyOwner {
+		tokenLimit = tokenLimit_;
+	}
 
 	/**
 	 * @notice update base uri for images
@@ -94,6 +102,7 @@ contract LensLadies is ERC721, Ownable {
 	 * @notice get uri for token, if it's in an image state return that uri
 	 * otherwise serve the video.
 	 * @param tokenId token to get URI for
+	 * @return {string} tokenURI
 	 */
 	function tokenURI(uint256 tokenId)
 		public
@@ -153,6 +162,7 @@ contract LensLadies is ERC721, Ownable {
 					reserveMapping[tokenId].updatedPrice <= msg.value),
 			"LOW_ETH"
 		);
+		require(tokenId < tokenLimit, "TOKEN_ID_OUT_OF_BOUNDS");
 
 		/// @notice add a past sale for iterating through on withdrawal
 		pastSales.push(tokenId);
@@ -194,5 +204,24 @@ contract LensLadies is ERC721, Ownable {
 		// Send owner remainder of balance
 		(success, ) = owner().call{ value: (balance * 95) / 100 }("");
 		require(success, "FAILED_SEND_OWNER");
+	}
+
+	/*--------------------------*/
+	/// owners
+	/*--------------------------*/
+
+	/**
+	 * @notice retrive list of all token owners
+	 * @return {address[]} sequential list of addresses per token id, with address(0)
+	 * allocated for unclaimed tokens.
+	 */
+	function allTokenOwners() external view returns (address[] memory) {
+		address[] memory tokenOwners = new address[](tokenLimit);
+
+		for (uint256 i = 0; i < tokenLimit; i++) {
+			tokenOwners[i] = _exists(i) ? ownerOf(i) : address(0);
+		}
+
+		return tokenOwners;
 	}
 }

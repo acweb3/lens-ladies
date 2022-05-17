@@ -3,6 +3,7 @@ const path = require('path');
 const rimraf = require('rimraf');
 const camelCase = require('camelcase');
 const { execSync } = require('child_process');
+const sharp = require('sharp');
 
 const IPFS_TEMP_DIR = 'ipfs://QmdLL1tdkmoGhKTePY6H9GhsGeqeCHQskBcWkoqjsaVUKe';
 const DO_NOT_INCLUDE_TRAIT_TYPES = [
@@ -17,7 +18,6 @@ const DO_NOT_INCLUDE_TRAIT_TYPES = [
 const convertFFMPEG = (conversions) => {
     for (const [cmd, conversion] of conversions) {
         try {
-            console.log(cmd);
             conversion();
         } catch (e) {
             console.log(e);
@@ -47,7 +47,8 @@ const getData = () => {
                     },
                 ].filter(
                     (attr) =>
-                        !DO_NOT_INCLUDE_TRAIT_TYPES.includes(attr.trait_type)
+                        !DO_NOT_INCLUDE_TRAIT_TYPES.includes(attr.trait_type) &&
+                        attr.value !== ''
                 ),
             };
         }, {});
@@ -62,9 +63,12 @@ const artists = async () => {
     rimraf.sync(dist);
     fs.mkdirSync(dist);
     fs.mkdirSync(path.join(dist, 'images'));
-    fs.mkdirSync(path.join(dist, 'videos'));
+    fs.mkdirSync(path.join(dist, 'images', 'chain'));
+    fs.mkdirSync(path.join(dist, 'images', 'site'));
     fs.mkdirSync(path.join(dist, 'metadata'));
     fs.mkdirSync(path.join(dist, 'metadata', 'chain'));
+    fs.mkdirSync(path.join(dist, 'metadata', 'chain', 'still'));
+    fs.mkdirSync(path.join(dist, 'metadata', 'chain', 'animated'));
     fs.mkdirSync(path.join(dist, 'metadata', 'site'));
 
     const data = getData();
@@ -87,7 +91,7 @@ const artists = async () => {
         let video;
         let key;
 
-        assetDir.map((asset) => {
+        assetDir.map(async (asset) => {
             const [fileName, extName] = asset.split('.');
 
             if (
@@ -95,6 +99,15 @@ const artists = async () => {
                 extName.toLowerCase() === 'jpeg'
             ) {
                 key = camelCase(fileName);
+
+                const originPath = path.join(
+                    __dirname,
+                    'artists',
+                    'raw',
+                    artistDirName,
+                    'assets',
+                    asset
+                );
 
                 fs.cpSync(
                     path.join(
@@ -110,7 +123,19 @@ const artists = async () => {
                         'artists',
                         'dist',
                         'images',
+                        'chain',
                         `${camelCase(fileName)}.jpeg`
+                    )
+                );
+
+                await sharp(originPath).toFile(
+                    path.join(
+                        __dirname,
+                        'artists',
+                        'dist',
+                        'images',
+                        'site',
+                        `${camelCase(fileName)}.webp`
                     )
                 );
 
@@ -125,6 +150,17 @@ const artists = async () => {
                     asset
                 );
 
+                const resize = `ffmpeg -i "${source}" -vf scale=400:-2 ${path.join(
+                    __dirname,
+                    'artists',
+                    'dist',
+                    'images',
+                    'site',
+                    `${camelCase(fileName)}.mp4`
+                )}`;
+
+                ffmpegConversions.push([resize, () => execSync(resize)]);
+
                 if (extName.toLocaleLowerCase() === 'mp4') {
                     fs.cpSync(
                         source,
@@ -132,7 +168,8 @@ const artists = async () => {
                             __dirname,
                             'artists',
                             'dist',
-                            'videos',
+                            'images',
+                            'chain',
                             `${camelCase(
                                 fileName
                             )}.${extName.toLocaleLowerCase()}`
@@ -145,7 +182,8 @@ const artists = async () => {
                         __dirname,
                         'artists',
                         'dist',
-                        'videos',
+                        'images',
+                        'chain',
                         `${camelCase(fileName)}.mp4`
                     )}`;
 
@@ -160,10 +198,39 @@ const artists = async () => {
         const metadata = {
             ...dataMap[artistDirName],
             key,
-            image_url: `${IPFS_TEMP_DIR}/${image}`,
         };
 
-        const text = JSON.stringify(metadata, null, 4);
+        const {
+            image_url,
+            description,
+            name,
+            attributes,
+            animation_url,
+            ...rest
+        } = metadata;
+
+        const still = JSON.stringify(
+            {
+                image_url: `${IPFS_TEMP_DIR}/${image}`,
+                description,
+                name,
+                attributes,
+                animation_url,
+            },
+            null,
+            4
+        );
+
+        const animated = JSON.stringify(
+            {
+                animation_url: `${IPFS_TEMP_DIR}/${video}`,
+                description,
+                name,
+                attributes,
+            },
+            null,
+            4
+        );
 
         fs.writeFileSync(
             path.join(
@@ -172,9 +239,23 @@ const artists = async () => {
                 'dist',
                 'metadata',
                 'chain',
+                'still',
                 metadata.tokenId
             ),
-            text
+            still
+        );
+
+        fs.writeFileSync(
+            path.join(
+                __dirname,
+                'artists',
+                'dist',
+                'metadata',
+                'chain',
+                'animated',
+                metadata.tokenId
+            ),
+            animated
         );
 
         siteMetadata.push(metadata);

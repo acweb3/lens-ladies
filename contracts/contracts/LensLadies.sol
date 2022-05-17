@@ -48,7 +48,7 @@ contract LensLadies is ERC721, Ownable {
 	 * @notice update the token limit
 	 * @param tokenLimit_ new token limit
 	 */
-	function setTokenLimit(uint256 tokenLimit_) public onlyOwner {
+	function setTokenLimit(uint256 tokenLimit_) external onlyOwner {
 		tokenLimit = tokenLimit_;
 	}
 
@@ -134,8 +134,8 @@ contract LensLadies is ERC721, Ownable {
 		uint256 updatedPrice,
 		address reserverAddress
 	) public onlyOwner {
-		/// @dev minimum price is 1.8 eth
-		require(updatedPrice >= 1800000000000000000, "LOW_ETH");
+		/// @dev minimum price is artist cut
+		require(updatedPrice >= artistCut, "LOW_ETH");
 		reserveMapping[tokenId] = Reserve({
 			updatedPrice: updatedPrice,
 			reserverAddress: reserverAddress
@@ -197,13 +197,10 @@ contract LensLadies is ERC721, Ownable {
 
 		delete pastSales;
 
-		// Send devs remaining 5%
-		(bool success, ) = sweetAndy.call{ value: (balance * 5) / 100 }("");
-		require(success, "FAILED_SEND_DEV");
-
+		// Send devs 5%
+		Address.sendValue(payable(owner()), (balance * 5) / 100);
 		// Send owner remainder of balance
-		(success, ) = owner().call{ value: (balance * 95) / 100 }("");
-		require(success, "FAILED_SEND_OWNER");
+		Address.sendValue(payable(owner()), (balance * 95) / 100);
 	}
 
 	/*--------------------------*/

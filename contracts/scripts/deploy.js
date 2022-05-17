@@ -1,21 +1,16 @@
 const { config } = require("../config");
+const deployArguments = require("../arguments.lens-ladies");
 
 async function main() {
 	const LensLadies = await hre.ethers.getContractFactory("LensLadies");
 	const deploymentData = LensLadies.interface.encodeDeploy([
-		config.ipfsURL,
-		config.ipfsURL,
-		[],
+		...deployArguments,
 	]);
 	const estimatedGas = await ethers.provider.estimateGas({
 		data: deploymentData,
 	});
 
-	const lensLadies = await LensLadies.deploy(
-		config.ipfsURL,
-		config.ipfsURL,
-		[]
-	);
+	const lensLadies = await LensLadies.deploy(...deployArguments);
 
 	await lensLadies.deployed();
 

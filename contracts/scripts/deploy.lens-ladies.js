@@ -1,4 +1,3 @@
-const { config } = require("../config");
 const deployArguments = require("../arguments.lens-ladies");
 
 async function main() {

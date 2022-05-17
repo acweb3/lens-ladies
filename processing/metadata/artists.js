@@ -5,7 +5,7 @@ const camelCase = require('camelcase');
 const { execSync } = require('child_process');
 const sharp = require('sharp');
 
-const IPFS_TEMP_DIR = 'ipfs://QmdLL1tdkmoGhKTePY6H9GhsGeqeCHQskBcWkoqjsaVUKe';
+const IPFS_TEMP_DIR = 'ipfs://QmTs8RYampxGFFM5tJs53oDuYdQgVoC52pNfBrcwLkandn';
 const DO_NOT_INCLUDE_TRAIT_TYPES = [
     'tokenId',
     'camelCase',
@@ -99,6 +99,7 @@ const artists = async () => {
                 extName.toLowerCase() === 'jpeg'
             ) {
                 key = camelCase(fileName);
+                image = `${camelCase(fileName)}.jpeg`;
 
                 const originPath = path.join(
                     __dirname,
@@ -138,8 +139,6 @@ const artists = async () => {
                         `${camelCase(fileName)}.webp`
                     )
                 );
-
-                image = `${camelCase(fileName)}.jpeg`;
             } else {
                 const source = path.join(
                     __dirname,
@@ -175,9 +174,42 @@ const artists = async () => {
                             )}.${extName.toLocaleLowerCase()}`
                         )
                     );
-                } else {
-                    // # TODO => figure this shit out
 
+                    const gif = `ffmpeg -i "${path.join(
+                        __dirname,
+                        'artists',
+                        'dist',
+                        'images',
+                        'chain',
+                        `${camelCase(fileName)}.${extName.toLocaleLowerCase()}`
+                    )}" -r 12 ${path.join(
+                        __dirname,
+                        'artists',
+                        'dist',
+                        'images',
+                        'chain',
+                        `${camelCase(fileName)}.gif`
+                    )}`;
+
+                    ffmpegConversions.push([
+                        gif,
+                        () => {
+                            execSync(gif);
+                            fs.rmSync(
+                                path.join(
+                                    __dirname,
+                                    'artists',
+                                    'dist',
+                                    'images',
+                                    'chain',
+                                    `${camelCase(
+                                        fileName
+                                    )}.${extName.toLocaleLowerCase()}`
+                                )
+                            );
+                        },
+                    ]);
+                } else {
                     const cmd = `ffmpeg -i "${source}" ${path.join(
                         __dirname,
                         'artists',
@@ -188,9 +220,42 @@ const artists = async () => {
                     )}`;
 
                     ffmpegConversions.push([cmd, () => execSync(cmd)]);
+
+                    const gif = `ffmpeg -i "${path.join(
+                        __dirname,
+                        'artists',
+                        'dist',
+                        'images',
+                        'chain',
+                        `${camelCase(fileName)}.mp4`
+                    )}" -r 12 ${path.join(
+                        __dirname,
+                        'artists',
+                        'dist',
+                        'images',
+                        'chain',
+                        `${camelCase(fileName)}.gif`
+                    )}`;
+
+                    ffmpegConversions.push([
+                        gif,
+                        () => {
+                            execSync(gif);
+                            fs.rmSync(
+                                path.join(
+                                    __dirname,
+                                    'artists',
+                                    'dist',
+                                    'images',
+                                    'chain',
+                                    `${camelCase(fileName)}.mp4`
+                                )
+                            );
+                        },
+                    ]);
                 }
 
-                video = `${camelCase(fileName)}.${extName.toLocaleLowerCase()}`;
+                video = `${camelCase(fileName)}.gif`;
             }
         });
 
@@ -266,7 +331,7 @@ const artists = async () => {
         `export const data = ${JSON.stringify(siteMetadata, null, 4)}`
     );
 
-    convertFFMPEG(ffmpegConversions);
+    // convertFFMPEG(ffmpegConversions);
 };
 
 module.exports = {

@@ -13,17 +13,25 @@ export const useMint = ({ tokenId }) => {
 		transactionName: "Mint",
 	});
 
+	// handle successful mints
 	useEffect(() => {
-		if (state && state.status !== "None" && state.status !== "Success") {
+		if (
+			state &&
+			state.status !== "None" &&
+			state.status !== "Success" &&
+			state.status !== "Exception"
+		) {
 			setIsMinting(true);
 		} else {
 			setIsMinting(false);
 		}
 	}, [state, setIsMinting]);
 
+	// handle mint error
 	useEffect(() => {
 		if (state && state.status === "Exception") {
 			setError(state.errorMessage);
+			setIsMinting(false);
 		}
 	}, [state]);
 

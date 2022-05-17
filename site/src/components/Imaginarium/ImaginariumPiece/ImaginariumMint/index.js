@@ -1,38 +1,38 @@
-import { useMint } from "./hooks/useMint";
 import { useEthers } from "@usedapp/core";
 import { useChainConfig } from "common/hooks/useChainConfig";
 import * as S from "components/Imaginarium/ImaginariumPiece/ImaginariumMint/ImaginariumMint.styled";
-import { ImaginariumOwner } from "components/Imaginarium/ImaginariumPiece/ImaginariumMint/ImaginariumOwner";
+import { useMint } from "components/Imaginarium/ImaginariumPiece/ImaginariumMint/hooks/useMint";
+import { useToggleTokenVideoState } from "components/Imaginarium/ImaginariumPiece/ImaginariumMint/hooks/useToggleTokenVideoState";
 
 export const ImaginariumMint = ({ nft, ownerOf }) => {
 	const { activateBrowserWallet, account } = useEthers();
-	const { mint, error, isMinting } = useMint({ tokenId: nft.tokenId });
+	const {
+		mint,
+		error: mintError,
+		isMinting,
+	} = useMint({ tokenId: nft.tokenId });
+	const {
+		toggleTokenVideoState,
+		error: toggleError,
+		isToggling,
+	} = useToggleTokenVideoState({ tokenId: nft.tokenId });
+
 	const { contract, openseaURL } = useChainConfig();
 
 	return (
 		<S.ImaginariumMint>
 			{(() => {
-				if (!account) {
+				if (ownerOf && ownerOf === account) {
 					return (
 						<S.ImaginariumMintButton
-							onClick={activateBrowserWallet}
+							onClick={toggleTokenVideoState}
 						>
-							Connect
+							Toggle Video
 						</S.ImaginariumMintButton>
 					);
 				}
 
-				if (isMinting) {
-					return (
-						<S.ImaginariumMintButton
-							onClick={activateBrowserWallet}
-						>
-							<S.ImaginariumMintLoader />
-						</S.ImaginariumMintButton>
-					);
-				}
-
-				if (ownerOf) {
+				if (ownerOf && ownerOf !== account) {
 					return (
 						<S.ImaginariumMintLink
 							href={`https://${openseaURL}.io/assets/${contract.address}/${nft.tokenId}`}
@@ -44,15 +44,35 @@ export const ImaginariumMint = ({ nft, ownerOf }) => {
 					);
 				}
 
+				if (!account) {
+					return (
+						<S.ImaginariumMintButton
+							onClick={activateBrowserWallet}
+						>
+							Connect
+						</S.ImaginariumMintButton>
+					);
+				}
+
+				if (isMinting || isToggling) {
+					return (
+						<S.ImaginariumMintButton
+							onClick={activateBrowserWallet}
+						>
+							<S.ImaginariumMintLoader />
+						</S.ImaginariumMintButton>
+					);
+				}
+
 				return (
 					<S.ImaginariumMintButton onClick={mint}>
 						Mint
 					</S.ImaginariumMintButton>
 				);
 			})()}
-			{error && (
+			{(mintError || toggleError) && (
 				<S.ImaginariumMintError>
-					{JSON.stringify(error)}
+					{JSON.stringify(mintError || toggleError)}
 				</S.ImaginariumMintError>
 			)}
 		</S.ImaginariumMint>

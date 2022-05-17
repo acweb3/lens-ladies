@@ -1,6 +1,5 @@
 import { useContractFunction, useEthers } from "@usedapp/core";
 import { useChainConfig } from "common/hooks/useChainConfig";
-import { utils } from "ethers";
 import { useEffect, useState } from "react";
 
 export const useToggleTokenVideoState = ({ tokenId }) => {
@@ -50,7 +49,7 @@ export const useToggleTokenVideoState = ({ tokenId }) => {
 		try {
 			await send(tokenId);
 		} catch (e) {
-			console.log(e);
+			console.error(e);
 			if (e?.code === 4001) {
 				setError("User denied transaction signature");
 			} else if (e.code && e.message.includes("execution reverted")) {

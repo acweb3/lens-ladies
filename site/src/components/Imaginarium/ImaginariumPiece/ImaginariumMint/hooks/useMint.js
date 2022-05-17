@@ -48,7 +48,7 @@ export const useMint = ({ tokenId }) => {
 				value: utils.parseEther("0.022"),
 			});
 		} catch (e) {
-			console.log(e);
+			console.error(e);
 			if (e?.code === 4001) {
 				setError("User denied transaction signature");
 			} else if (e.code && e.message.includes("execution reverted")) {

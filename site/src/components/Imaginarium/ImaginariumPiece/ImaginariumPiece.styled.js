@@ -7,8 +7,7 @@ export const ImaginariumCopy = styled.div`
 	font-stretch: normal;
 	font-size: 18px;
 	line-height: 22px;
-	font-family: wfont_5a71ce_fc89fa9e69b3461c8224c09b2b49e7db,
-		wf_fc89fa9e69b3461c8224c09b2, orig_open_sans_semibold, sans-serif;
+	font-family: wix3, sans-serif;
 `;
 
 export const ImaginariumVideo = styled.video`
@@ -42,6 +41,7 @@ export const ImaginariumImageWrapper = styled.div`
 
 			&::after {
 				content: "SOLD";
+				font-family: wix2;
 				position: absolute;
 				top: calc(50% - 24px);
 

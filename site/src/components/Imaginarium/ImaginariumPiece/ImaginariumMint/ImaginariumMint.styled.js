@@ -17,8 +17,7 @@ const imaginariumMintCss = css`
 	align-items: center;
 	justify-content: center;
 
-	font-family: wfont_6dd698_5add2e41e15b44c2959e189c19647ab7,
-		wf_5add2e41e15b44c2959e189c1, orig_sweetsansprolight, sans-serif;
+	font-family: wix1, sans-serif;
 
 	color: white;
 	background: transparent;

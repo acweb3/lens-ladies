@@ -3,6 +3,7 @@ import { useChainConfig } from "common/hooks/useChainConfig";
 import * as S from "components/Imaginarium/ImaginariumPiece/ImaginariumMint/ImaginariumMint.styled";
 import { useMint } from "components/Imaginarium/ImaginariumPiece/ImaginariumMint/hooks/useMint";
 import { useToggleTokenVideoState } from "components/Imaginarium/ImaginariumPiece/ImaginariumMint/hooks/useToggleTokenVideoState";
+import { BaseButton } from "components/ui/BaseButton";
 
 export const ImaginariumMint = ({ nft, ownerOf, listPrice }) => {
 	const { activateBrowserWallet, account } = useEthers();
@@ -24,50 +25,44 @@ export const ImaginariumMint = ({ nft, ownerOf, listPrice }) => {
 			{(() => {
 				if (ownerOf && ownerOf === account) {
 					return (
-						<S.ImaginariumMintButton
-							onClick={toggleTokenVideoState}
-						>
+						<BaseButton.BaseButton onClick={toggleTokenVideoState}>
 							Toggle Video
-						</S.ImaginariumMintButton>
+						</BaseButton.BaseButton>
 					);
 				}
 
 				if (ownerOf && ownerOf !== account) {
 					return (
-						<S.ImaginariumMintLink
+						<BaseButton.BaseLink
 							href={`https://${openseaURL}.io/assets/${contract.address}/${nft.tokenId}`}
 							target="_blank"
 							rel="noopener noreferrer"
 						>
 							View on Opensea
-						</S.ImaginariumMintLink>
+						</BaseButton.BaseLink>
 					);
 				}
 
 				if (!account) {
 					return (
-						<S.ImaginariumMintButton
-							onClick={activateBrowserWallet}
-						>
+						<BaseButton.BaseButton onClick={activateBrowserWallet}>
 							Connect
-						</S.ImaginariumMintButton>
+						</BaseButton.BaseButton>
 					);
 				}
 
 				if (isMinting || isToggling) {
 					return (
-						<S.ImaginariumMintButton
-							onClick={activateBrowserWallet}
-						>
+						<BaseButton.BaseButton onClick={activateBrowserWallet}>
 							<S.ImaginariumMintLoader />
-						</S.ImaginariumMintButton>
+						</BaseButton.BaseButton>
 					);
 				}
 
 				return (
-					<S.ImaginariumMintButton onClick={mint}>
+					<BaseButton.BaseButton onClick={mint}>
 						Mint
-					</S.ImaginariumMintButton>
+					</BaseButton.BaseButton>
 				);
 			})()}
 			<S.ImaginariumMintError isActive={mintError || toggleError}>

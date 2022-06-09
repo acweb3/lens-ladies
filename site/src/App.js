@@ -1,13 +1,16 @@
+import { MintModal } from "./components/MintModal";
 import { Imaginarium } from "components/Imaginarium";
-import { SiteWrapper } from "components/SiteWrapper";
-import { Contexts } from "contexts";
+import { useModalViewContext } from "contexts/ModalViewContext";
+import { useNFTMetadataContext } from "contexts/NFTMetadataContext";
 
 export const App = () => {
+	const { modalView } = useModalViewContext();
+	const { nfts } = useNFTMetadataContext();
+
 	return (
-		<Contexts>
-			<SiteWrapper>
-				<Imaginarium />
-			</SiteWrapper>
-		</Contexts>
+		<>
+			{modalView && <MintModal nft={modalView} />}
+			<Imaginarium nfts={nfts} />
+		</>
 	);
 };

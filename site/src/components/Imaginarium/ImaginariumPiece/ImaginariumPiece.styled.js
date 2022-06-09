@@ -17,7 +17,7 @@ export const ImaginariumVideo = styled.video`
 	width: 100%;
 	z-index: 2;
 
-	opacity: 0;
+	opacity: 1;
 	transition: opacity 400ms;
 
 	${(props) =>
@@ -41,7 +41,7 @@ export const ImaginariumImageWrapper = styled.div`
 
 			&::after {
 				content: "SOLD";
-				font-family: wix1;
+				font-family: wix3;
 				position: absolute;
 				top: calc(50% - 24px);
 
@@ -63,8 +63,14 @@ export const ImaginariumImageWrapper = styled.div`
 		`}
 `;
 
-export const ImaginariumPiece = styled.div`
+export const ImaginariumPieceMetadata = styled.div`
 	display: flex;
 	flex-direction: column;
-	margin: 32px;
+	align-items: center;
+	margin: 16px 16px 8px;
+`;
+
+export const ImaginariumPiece = styled.div`
+	display: flex;
+	flex-direction: row;
 `;

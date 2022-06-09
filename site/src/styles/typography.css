@@ -1,19 +1,4 @@
 @font-face {
-	font-family: "wix1";
-	src: url("../assets/fonts/8bf38806-3423-4080-b38f-d08542f7e4ac.woff2");
-}
-
-@font-face {
-	font-family: "wix2";
-	src: url("../assets/fonts/26091050-06ef-4fd5-b199-21b27c0ed85e.woff2");
-}
-
-@font-face {
 	font-family: "wix3";
-	src: url("../assets/fonts/file.woff2");
-}
-
-@font-face {
-	font-family: "wix3";
-	src: url("../assets/fonts/file-2.woff2");
+	src: url("../assets/fonts/SweetSansPro-Light.ttf");
 }

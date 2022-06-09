@@ -1,10 +1,6 @@
-import { data } from "assets/data";
-import { pullAsset } from "common/utils/pullAsset";
 import * as S from "components/Imaginarium/Imaginarium.styled";
 import { ImaginariumPiece } from "components/Imaginarium/ImaginariumPiece";
-import { useAllTokenOwners } from "components/Imaginarium/hooks/useAllTokenOwners";
-import { useListPrice } from "components/Imaginarium/hooks/useListPrice";
-import { useEffect, useState } from "react";
+import { useTokenOwnersContext } from "contexts/TokenOwnersContext";
 
 const chunk = (arr) => {
 	return arr.reduce(
@@ -19,28 +15,8 @@ const chunk = (arr) => {
 	);
 };
 
-export const Imaginarium = () => {
-	const [nfts, setNfts] = useState([]);
-	const { allTokenOwners } = useAllTokenOwners();
-	const { listPrice } = useListPrice();
-
-	useEffect(() => {
-		const fetchImages = async () => {
-			const imagesMap = await Promise.all(
-				data.map(async (next) => {
-					return {
-						...next,
-						image: await pullAsset(next.key, false),
-						video: await pullAsset(next.key, true),
-					};
-				})
-			);
-
-			setNfts(imagesMap);
-		};
-
-		fetchImages();
-	}, []);
+export const Imaginarium = ({ nfts }) => {
+	const { allTokenOwners } = useTokenOwnersContext();
 
 	return (
 		<S.Imaginarium>
@@ -59,7 +35,6 @@ export const Imaginarium = () => {
 											? allTokenOwners[nft.tokenId]
 											: undefined
 									}
-									listPrice={listPrice}
 								/>
 							);
 						})}

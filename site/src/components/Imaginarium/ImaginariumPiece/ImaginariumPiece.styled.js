@@ -29,7 +29,6 @@ export const ImaginariumVideo = styled.video`
 
 export const ImaginariumImageWrapper = styled.div`
 	position: relative;
-	max-width: 400px;
 	overflow: hidden;
 
 	${(props) =>
@@ -61,16 +60,25 @@ export const ImaginariumImageWrapper = styled.div`
 				letter-spacing: 2px;
 			}
 		`}
+
+	${(props) => props.theme.breakpoints.extraSmall`
+		max-width: ${props.isModal ? 200 : 400}px;
+	`}
 `;
 
 export const ImaginariumPieceMetadata = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: center;
 	margin: 16px 16px 8px;
 `;
 
 export const ImaginariumPiece = styled.div`
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
+
+	${(props) => props.theme.breakpoints.extraSmall`
+		flex-direction: row;
+	`}
 `;

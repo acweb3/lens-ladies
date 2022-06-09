@@ -10,6 +10,9 @@ export const ImaginariumMintError = styled.div`
 	color: #f00;
 	font-style: italic;
 	width: 100%;
+
+	word-break: break-word;
+	max-width: 200px;
 `;
 
 export const ImaginariumMint = styled.div`

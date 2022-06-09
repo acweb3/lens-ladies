@@ -20,7 +20,10 @@ export const ImaginariumPiece = ({ nft, ownerOf, isModal }) => {
 				onMouseEnter={() => setIsVideo(true)}
 				onMouseLeave={() => setIsVideo(false)}
 			>
-				<S.ImaginariumImageWrapper isSold={Boolean(ownerOf)}>
+				<S.ImaginariumImageWrapper
+					isModal={isModal}
+					isSold={Boolean(ownerOf)}
+				>
 					{!ownerOf && (
 						<S.ImaginariumVideo
 							autoPlay
@@ -55,14 +58,16 @@ export const ImaginariumPiece = ({ nft, ownerOf, isModal }) => {
 				<ImaginariumOwner address={ownerOf} />
 			</S.ImaginariumPieceMetadata>
 			{isModal && (
-				<S.ImaginariumCopy
-					style={{
-						marginTop: 32,
-						maxWidth: 640,
-					}}
-				>
-					{nft.description}
-				</S.ImaginariumCopy>
+				<S.ImaginariumPieceMetadata>
+					<S.ImaginariumCopy
+						style={{
+							maxWidth: 480,
+							textAlign: "center",
+						}}
+					>
+						{nft.description}
+					</S.ImaginariumCopy>
+				</S.ImaginariumPieceMetadata>
 			)}
 		</S.ImaginariumPiece>
 	);

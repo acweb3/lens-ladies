@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const ImaginariumColumn = styled.div`
 	display: flex;
 	flex-direction: column;
-	width: 464px;
+	width: 432px;
 `;
 
 export const Imaginarium = styled.section`

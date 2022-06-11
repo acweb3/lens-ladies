@@ -3,8 +3,10 @@ import { ImaginariumPiece } from "components/Imaginarium/ImaginariumPiece";
 import * as S from "components/MintModal/MintModal.styled";
 import { useModalViewContext } from "contexts/ModalViewContext";
 import { useTokenOwnersContext } from "contexts/TokenOwnersContext";
+import { useEffect, useRef } from "react";
 
 export const MintModal = ({ nft }) => {
+	const ref = useRef();
 	const { setModalView } = useModalViewContext();
 	const { allTokenOwners } = useTokenOwnersContext();
 
@@ -18,9 +20,13 @@ export const MintModal = ({ nft }) => {
 		[]
 	);
 
+	useEffect(() => {
+		ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+	}, []);
+
 	return (
 		<S.MintModal>
-			<S.MintModalDialog>
+			<S.MintModalDialog ref={ref}>
 				<ImaginariumPiece
 					isModal
 					nft={nft}

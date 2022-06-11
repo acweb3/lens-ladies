@@ -52,7 +52,7 @@ export const ImaginariumPiece = ({ nft, ownerOf, isModal }) => {
 							setModalView(nft);
 						}}
 					>
-						Mint
+						{ownerOf ? "See Details" : "Mint"}
 					</BaseButton.BaseButton>
 				)}
 				<ImaginariumOwner address={ownerOf} />
@@ -66,6 +66,14 @@ export const ImaginariumPiece = ({ nft, ownerOf, isModal }) => {
 						}}
 					>
 						{nft.description}
+					</S.ImaginariumCopy>
+					<S.ImaginariumCopy
+						style={{
+							maxWidth: 480,
+							textAlign: "center",
+						}}
+					>
+						Charity: {nft.charity}
 					</S.ImaginariumCopy>
 				</S.ImaginariumPieceMetadata>
 			)}

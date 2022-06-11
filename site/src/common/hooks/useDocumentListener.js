@@ -27,5 +27,6 @@ export const useDocumentListener = (
 				document.removeEventListener(eventListenerTypes, callback);
 			}
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [eventListenerTypes, callback, ...deps, options]);
 };

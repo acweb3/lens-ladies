@@ -182,7 +182,7 @@ const artists = async () => {
                         'images',
                         'chain',
                         `${camelCase(fileName)}.${extName.toLocaleLowerCase()}`
-                    )}" -r 12 ${path.join(
+                    )}" -filter_complex "[0:v] fps=12,scale=600:-1,split [a][b];[a] palettegen [p];[b][p] paletteuse" ${path.join(
                         __dirname,
                         'artists',
                         'dist',
@@ -190,6 +190,10 @@ const artists = async () => {
                         'chain',
                         `${camelCase(fileName)}.gif`
                     )}`;
+
+                    console.log({
+                        gif,
+                    });
 
                     ffmpegConversions.push([
                         gif,
@@ -228,7 +232,7 @@ const artists = async () => {
                         'images',
                         'chain',
                         `${camelCase(fileName)}.mp4`
-                    )}" -r 12 ${path.join(
+                    )}" -filter_complex "[0:v] fps=12,scale=600:-1,split [a][b];[a] palettegen [p];[b][p] paletteuse" ${path.join(
                         __dirname,
                         'artists',
                         'dist',
@@ -331,7 +335,7 @@ const artists = async () => {
         `export const data = ${JSON.stringify(siteMetadata, null, 4)}`
     );
 
-    // convertFFMPEG(ffmpegConversions);
+    convertFFMPEG(ffmpegConversions);
 };
 
 module.exports = {

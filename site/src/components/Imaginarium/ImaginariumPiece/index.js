@@ -16,15 +16,12 @@ export const ImaginariumPiece = ({ nft, ownerOf, isModal }) => {
 			onMouseEnter={() => setIsVideo(true)}
 			onMouseLeave={() => setIsVideo(false)}
 		>
-			<S.ImaginariumPieceMetadata
-				onMouseEnter={() => setIsVideo(true)}
-				onMouseLeave={() => setIsVideo(false)}
-			>
+			<S.ImaginariumPieceMetadata>
 				<S.ImaginariumImageWrapper
 					isModal={isModal}
-					isSold={Boolean(ownerOf)}
+					isSold={Boolean(ownerOf) && !isModal}
 				>
-					{!ownerOf && (
+					{!(ownerOf && isVideo) && (
 						<S.ImaginariumVideo
 							autoPlay
 							loop
@@ -34,7 +31,7 @@ export const ImaginariumPiece = ({ nft, ownerOf, isModal }) => {
 							src={nft.video}
 						/>
 					)}
-					<img alt={nft.name} src={nft.image} />
+					<S.ImaginariumImage alt={nft.name} src={nft.image} />
 				</S.ImaginariumImageWrapper>
 				<S.ImaginariumCopy>
 					{nft.artist} — {nft.name}{" "}

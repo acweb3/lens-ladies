@@ -21,7 +21,7 @@ export const MintModal = ({ nft }) => {
 	);
 
 	useEffect(() => {
-		ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+		ref.current?.scrollIntoView({ block: "center" });
 	}, []);
 
 	return (

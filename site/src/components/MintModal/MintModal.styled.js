@@ -50,7 +50,7 @@ export const MintModalDialogWrapper = styled.div`
 `;
 
 export const MintModal = styled.div`
-	position: fixed;
+	position: absolute;
 	z-index: 5;
 
 	top: 0;

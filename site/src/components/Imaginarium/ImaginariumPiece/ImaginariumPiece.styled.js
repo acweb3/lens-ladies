@@ -10,6 +10,8 @@ export const ImaginariumCopy = styled.div`
 	font-family: wix3, sans-serif;
 `;
 
+export const ImaginariumImage = styled.img``;
+
 export const ImaginariumVideo = styled.video`
 	position: absolute;
 	top: 0;
@@ -17,7 +19,7 @@ export const ImaginariumVideo = styled.video`
 	width: 100%;
 	z-index: 2;
 
-	opacity: 1;
+	opacity: 0;
 	transition: opacity 400ms;
 
 	${(props) =>
@@ -31,10 +33,18 @@ export const ImaginariumImageWrapper = styled.div`
 	position: relative;
 	overflow: hidden;
 
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
 	${(props) =>
 		props.isSold &&
 		css`
-			& > * {
+			& > ${ImaginariumVideo} {
+				opacity: 0;
+			}
+
+			& > ${ImaginariumImage} {
 				opacity: 0.4;
 			}
 
@@ -62,7 +72,7 @@ export const ImaginariumImageWrapper = styled.div`
 		`}
 
 	${(props) => props.theme.breakpoints.extraSmall`
-		max-width: ${props.isModal ? 200 : 400}px;
+		max-width: ${props.isModal ? 200 : 800}px;
 	`}
 `;
 

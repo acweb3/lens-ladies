@@ -5,7 +5,7 @@ const camelCase = require('camelcase');
 const { execSync } = require('child_process');
 const sharp = require('sharp');
 
-const IPFS_TEMP_DIR = 'ipfs://QmTs8RYampxGFFM5tJs53oDuYdQgVoC52pNfBrcwLkandn';
+const IPFS_TEMP_DIR = 'ipfs://QmdcajgRKkNouBsWExVFAX7nxXCyT3BxqeJ7ZU9JyLWDnW';
 const DO_NOT_INCLUDE_TRAIT_TYPES = [
     'tokenId',
     'camelCase',
@@ -191,10 +191,6 @@ const artists = async () => {
                         `${camelCase(fileName)}.gif`
                     )}`;
 
-                    console.log({
-                        gif,
-                    });
-
                     ffmpegConversions.push([
                         gif,
                         () => {
@@ -335,7 +331,7 @@ const artists = async () => {
         `export const data = ${JSON.stringify(siteMetadata, null, 4)}`
     );
 
-    convertFFMPEG(ffmpegConversions);
+    // convertFFMPEG(ffmpegConversions);
 };
 
 module.exports = {

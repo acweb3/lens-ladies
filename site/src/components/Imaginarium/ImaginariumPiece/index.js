@@ -33,7 +33,11 @@ export const ImaginariumPiece = ({ nft, ownerOf, isModal }) => {
 					)}
 					<S.ImaginariumImage alt={nft.name} src={nft.image} />
 				</S.ImaginariumImageWrapper>
-				<S.ImaginariumCopy>
+				<S.ImaginariumCopy
+					style={{
+						textAlign: "center",
+					}}
+				>
 					{nft.artist} — {nft.name}{" "}
 					{listPrice && <>({listPrice} ETH)</>}
 				</S.ImaginariumCopy>
@@ -49,7 +53,7 @@ export const ImaginariumPiece = ({ nft, ownerOf, isModal }) => {
 							setModalView(nft);
 						}}
 					>
-						{ownerOf ? "See Details" : "Mint"}
+						{ownerOf ? "See Details" : "View More"}
 					</BaseButton.BaseButton>
 				)}
 				<ImaginariumOwner address={ownerOf} />

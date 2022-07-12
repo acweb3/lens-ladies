@@ -183,7 +183,7 @@ export const data = [
 			"The Valley of Dreams in New Mexico is so quiet that you can hear the inhale of your breath with the exhale of the wind. On this particular night, I roamed amongst the silent hoodoos searching for the perfect composition to complement the rising galactic core. As I climbed higher and higher into this natural city eroded by time, these shorter formations caught my eye. I loved how the textured rock created a pathway leading the viewer on an infinite journey into the cosmos.",
 		yearCreated: "2021",
 		charity:
-			"10 percent of the profits will be donated to Tim Baca to help launch the nonprofit Cameras4Kids — an organization dedicated to providing DSLR cameras to underprivileged children at no cost to their families.",
+			"10 percent of the profits will be donated to the International Dark Sky Association to help protect the night for present and future generations.",
 		location: "Valley of Dreams, New Mexico",
 		camera: "Canon R6",
 		lens: "Sigma 14-24",
@@ -307,7 +307,7 @@ export const data = [
 		attributes: [
 			{
 				trait_type: "Artist",
-				value: "Sarah Lindsay",
+				value: "Sarah Lyndsay",
 			},
 			{
 				trait_type: "Year Created",
@@ -342,7 +342,7 @@ export const data = [
 				value: "30 seconds",
 			},
 		],
-		artist: "Sarah Lindsay",
+		artist: "Sarah Lyndsay",
 		wallet: "0x3c7A0fB79E04c3c7fDF66452A3AD073998d49104",
 		name: "Collide",
 		description:

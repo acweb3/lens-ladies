@@ -3,6 +3,15 @@ import { useChainConfig } from "common/hooks/useChainConfig";
 import { utils } from "ethers";
 import { useEffect, useState } from "react";
 
+const getError = (error) => {
+	console.log(error && JSON.stringify(error));
+	if (error && JSON.stringify(error).includes("insufficient funds")) {
+		return "Insufficient funds";
+	}
+
+	return error;
+};
+
 export const useMint = ({ tokenId, listPrice }) => {
 	const { contract } = useChainConfig();
 	const { account } = useEthers();
@@ -65,7 +74,7 @@ export const useMint = ({ tokenId, listPrice }) => {
 
 	return {
 		mint,
-		error,
+		error: getError(error),
 		isMinting,
 	};
 };
